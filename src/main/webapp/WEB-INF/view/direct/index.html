@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模拟器添加内容地址</title>
+    <link type="text/css" rel="stylesheet" href="#(ctx)/assets/materialize/css/materialize.min.css"
+          media="screen,projection" />
+    <link href="#(ctx)/assets/iconfont/material-icons.css" rel="stylesheet">
+    <script type="text/javascript" src="#(ctx)/assets/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="#(ctx)/assets/materialize/js/materialize.min.js"></script>
+    <script type="text/javascript" src="#(ctx)/assets/js/pace.min.js"></script>
+    <script type="text/javascript" src="#(ctx)/assets/js/masonry.pkgd.min.js"></script>
+    <script>
+        $(function(){
+            $(".sub").click(function(){
+                var sname=$("#name").val();
+                var usercode = $("#usercode").val();
+                var sidno=$("#id_no").val();
+                if(sname==null || sidno==null || usercode==null){
+                    Materialize.toast("必填项不能为空", 404);
+                    return false;
+                }
+                $.post($(".sf").attr('action'),$(".sf").serialize(),function(data){
+                    console.log(data);
+                    if (data.isOk) {
+                        $("#name").val("");
+                        $("#id_no").val("");
+                        $("#usercode").val("");
+                        window.location.reload();
+                    } else {
+                        Materialize.toast(data.error, 4000);
+                        $("#name").val("");
+                        $("#id_no").val("");
+                        $("#usercode").val("");
+                    }
+                });
+            });
+
+            $("tbody tr").each(function(){
+                var dtr=$(this);
+                var checkedvalue;
+                dtr.click(function(){
+                checkedvalue = dtr.attr("checked");
+                if(checkedvalue){
+                    dtr.css("background",'');
+                    dtr.attr("checked",null);
+                }else{
+                    dtr.css("background","#99FF99");
+                    dtr.attr("checked","checked");
+                }
+            });
+        });
+  $(".del").click(function(){
+      var ids= new Array();
+      $("tbody tr").each(function(){
+          var value = $(this).attr("checked");
+          if(value){
+              var cid = $(this).attr("cid");
+              ids.push(cid);
+              $.post("#(ctx)/direct/delete?cid="+cid,function(data){
+                  if (data.isOk) {
+                      $("#name").val("");
+                      $("#id_no").val("");
+                      $("#usercode").val("");
+                  } else {
+                      Materialize.toast(data.error, 4000);
+                  }
+              });
+          }
+      });
+      if(ids.length<=0){
+          Materialize.toast("至少选择一条信息删除!!!",4000);
+      }else{
+          window.location.reload();
+      }
+
+ });
+
+        })
+    </script>
+<style>
+    .s{
+        width: 800px;
+        height: 300px;
+        margin-top: 50px;
+        margin-left: 400px;
+    }
+    .lis{
+        width: 1000px;
+        height: 100%;
+        margin-left: 400px;
+        border: 1px solid salmon;
+    }
+    h1{
+        margin-left: 30px;
+    }
+    span{
+        font-size: 14px;
+        color: red;
+    }
+    tr{
+        border: 1px solid gray;
+    }
+</style>
+</head>
+<body>
+<div class="row s" >
+    <form class="col s12 sf" action="#(ctx)/direct/save">
+        <div class="row">
+            <h1>加入客户信息</h1>
+        </div>
+        <div class="row">
+            <div class="input-field col s3">
+                <input id="name" name="name" type="text" class="validate">
+                <label for="name"><span>*</span>客户姓名</label>
+            </div>
+            <div class="input-field col s4">
+                <input  id="id_no" name="idno"  type="text" class="validate">
+                <label for="id_no"><span>*</span>客户身份证</label>
+            </div>
+            <div class="input-field col s3">
+                <input id="usercode" name="usercode" type="text" class="validate">
+                <label for="usercode"><span>*</span>电销分派员</label>
+            </div>
+        </div>
+         <div class="row">
+             <div class="input-field col s3">
+                 <a class="waves-effect waves-light btn sub">提交</a>
+             </div>
+             <div class="input-field col s3">
+                 <a class="waves-effect waves-light btn del">删除</a>
+             </div>
+         </div>
+
+    </form>
+</div>
+<div class="lis">
+    <table class="dirctinfovos">
+        <thead>
+         <th>客户姓名</th>
+         <th>客户身份证</th>
+         <th>分派人员</th>
+        </thead>
+        <tbody>
+         #for(x:dirctinfos)
+          <tr cid="#(x.id??)">
+              <td>#(x.name??)</td>
+              <td>#(x.idno??)</td>
+              <td>#(x.usercode??)</td>
+          </tr>
+         #end
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
