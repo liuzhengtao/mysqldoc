@@ -20,6 +20,8 @@ import com.mysqldoc.common.handler.GlobalbHandler;
 import com.mysqldoc.common.model._MappingKit;
 import org.apache.log4j.Logger;
 
+import java.sql.*;
+
 /**
  * 系统配置
  * 
@@ -106,5 +108,30 @@ public class MySQLDocConfig extends JFinalConfig {
 		 * 特别注意：Eclipse 之下建议的启动方式
 		 */
 		JFinal.start("src/main/webapp", 8887, "/");
+
+		/*String driver = "oracle.jdbc.OracleDriver";
+		//String url = "jdbc:oracle:thin:@140.206.216.47:16021:kftpp";
+		String url="jdbc:oracle:thin:@//140.206.216.47:16021/kftpp";
+		String user = "tpp";
+		String password = "TPP#kf#7knw6TB839";
+		Connection con = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		boolean flag = false;
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, user, password);
+			String sql = "select * from TPP_TRADE_T_COLLECT_INFO";
+			pstm = con.prepareStatement(sql);
+			rs = pstm.executeQuery();
+			while (rs.next()){
+				System.out.println(rs.getString("PAYER_NAME"));
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}*/
 	}
 }

@@ -38,7 +38,7 @@ public class ParseDbService {
 		// 创建数据源
 		if (null == c) {
 			if(config.getDbtype()==1){
-				 String url = "jdbc:oracle:thin:@" + config.getIp()+":"+config.getPort() + ":"+config.getSID();
+				 String url = "jdbc:oracle:thin:@//" + config.getIp()+":"+config.getPort() + "/"+config.getSID();
 				 druidPlugin = new DruidPlugin(url, config.getUsername(), config.getPassword(),driver);
 			}else{
 				druidPlugin = new DruidPlugin(
